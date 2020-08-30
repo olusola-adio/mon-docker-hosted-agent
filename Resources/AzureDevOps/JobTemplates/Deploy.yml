@@ -1,0 +1,25 @@
+parameters:
+  AksResourceGroup: ''
+  AzureSubscriptionEndpoint: ''
+  Environment: ''
+  ImageBaseName: ''
+  KubernetesCluster: ''
+  AzurePatToken: ''
+
+jobs:
+- deployment: DeployTo_${{ parameters.Environment }}
+  pool:
+    vmImage: windows-latest
+  environment: ${{ parameters.Environment }}
+  strategy:
+    runOnce:
+      deploy:
+        steps:
+        - template: ../StepTemplates/DeployDocker.yml
+          parameters:
+            AksResourceGroup: ${{ parameters.AksResourceGroup }}
+            AzureSubscriptionEndpoint: ${{ parameters.AzureSubscriptionEndpoint}}
+            ImageBaseName: ${{ parameters.ImageBaseName }}
+            KubernetesCluster: ${{ parameters.KubernetesCluster }}
+            ManifestFileName: mon-docker-agent.yaml
+            AzurePatToken: ${{ parameters.AzurePatToken }}

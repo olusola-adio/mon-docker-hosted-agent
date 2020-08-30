@@ -1,0 +1,67 @@
+variables:
+    ImageBaseName: mon-docker-hosted-agent
+
+
+resources:
+  repositories:
+  - repository: self
+  - repository: mon-devops
+    type: github
+    name: olusola-adio/mon-devops
+    endpoint: 'olusola-adio'
+    ref: refs/tags/v1.11.1
+
+trigger: 
+  branches:
+    include: 
+    - master
+  paths: 
+    include:
+    - Resources/Dockerfiles
+
+pr:
+  branches:
+    include: 
+    - master
+  paths: 
+    include:
+    - Resources/Dockerfiles
+
+stages:
+- stage: Build
+  variables:
+    - group: mon-shared-all
+    - group: mon-shared-dev
+
+  jobs:
+  - template: JobTemplates/BuildContainer.yml
+    parameters:
+      DevSitContainerRegistryAdminUser: $(DevContainerRegistryAdminUser)
+      DevSitContainerRegistryPassword: $(DevContainerRegistryPassword)
+      DockerfileContext: 'Resources/DockerFiles'
+      DockerfileName: 'Dockerfile'
+      ImageBaseName: ${{ variables.ImageBaseName }}
+      #TO DO: decide how to tag and publish image builds from branches
+      ImageTag: $(Build.BuildNumber)
+
+- stage: DeployDEVStage
+  displayName: Deploy DEV stage
+  dependsOn: Build
+  condition:  and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
+  variables:
+      - group: mon-shared-all
+      - group: KeyVault - mon-dev-shared-kv
+      - group: mon-shared-dev
+      - template: VariableTemplates\DevEnvironmentVariables.yml
+      - template: VariableTemplates\SharedEnvironmentVariables.yml
+  jobs:
+  - template: JobTemplates/Deploy.yml
+    parameters:
+      AksResourceGroup: $(sharedResourceGroup)
+      AzureSubscriptionEndpoint: 'mon(cb5ab4a7-dd08-4be3-9d7e-9f68ae30f224)'
+      Environment: DEV_SHARED
+      ImageBaseName: ${{ variables.ImageBaseName }}
+      KeyVaultName: $(sharedKeyVaultName)
+      KubernetesCluster: $(sharedAksCluster)
+      AzurePatToken:  $(AzureDevOpsAgentPatToken)
+

@@ -1,0 +1,23 @@
+parameters:
+  DevSitContainerRegistryAdminUser: ''
+  DevSitContainerRegistryPassword: ''
+  DockerfileContext: ''
+  DockerfileName: ''
+  ImageBaseName: ''
+  ImageTag: ''
+
+jobs:
+- job: BuildNCSDockerDevOpsAgentContainer
+  displayName: Build and publish build agent container
+  pool: 'Hosted Ubuntu 1604'
+  steps:
+  - template: AzureDevOpsTemplates/Build/StepTemplates/mon-docker-publish-k8smanifest.yml@mon-devops
+    parameters:
+      ContainerRegistryAdminUser: ${{ parameters.DevSitContainerRegistryAdminUser }}
+      ContainerRegistryPassword: ${{ parameters.DevSitContainerRegistryPassword }}
+      DockerfileContext: '${{ parameters.DockerfileContext }}'
+      DockerfileName: ${{ parameters.DockerfileName }}
+      ImageBaseName: ${{ parameters.ImageBaseName }}
+      ImageTag: ${{ parameters.ImageTag }}
+      ManifestFilePath: 'manifests/mon-docker-agent.yaml'
+        

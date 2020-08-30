@@ -37,8 +37,8 @@ stages:
   jobs:
   - template: JobTemplates/BuildContainer.yml
     parameters:
-      DevSitContainerRegistryAdminUser: $(DevContainerRegistryAdminUser)
-      DevSitContainerRegistryPassword: $(DevContainerRegistryPassword)
+      DevSitContainerRegistryAdminUser: $(ContainerRegistryAdminUser)
+      DevSitContainerRegistryPassword: $(ContainerRegistryPassword)
       DockerfileContext: 'Resources/DockerFiles'
       DockerfileName: 'Dockerfile'
       ImageBaseName: ${{ variables.ImageBaseName }}

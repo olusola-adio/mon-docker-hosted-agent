@@ -21,10 +21,10 @@ spec:
           resources:
             requests:
               cpu: "130m"
-              memory: "900Mi"
+              memory: "300Mi"
             limits:
               cpu: "130m"
-              memory: "900Mi"
+              memory: "300Mi"
           env:
           - name: AZP_POOL
             value: 'MON - Docker'

@@ -32,6 +32,7 @@ stages:
   variables:
     - group: mon-shared-all
     - group: mon-shared-dev
+    - group: 'KeyVault - mon-dev-shared-kv'
 
   jobs:
   - template: JobTemplates/BuildContainer.yml

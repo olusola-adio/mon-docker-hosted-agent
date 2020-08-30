@@ -64,5 +64,5 @@ stages:
       ImageBaseName: ${{ variables.ImageBaseName }}
       KeyVaultName: $(sharedKeyVaultName)
       KubernetesCluster: $(sharedAksCluster)
-      AzurePatToken:  $(AzureDevOpsAgentPatToken)
+      AzurePatToken:  $(AzurePatToken)
 

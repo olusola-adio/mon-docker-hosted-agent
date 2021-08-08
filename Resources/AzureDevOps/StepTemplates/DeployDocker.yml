@@ -5,6 +5,7 @@ parameters:
   KubernetesCluster: ''
   ManifestFilename: ''
   AzurePatToken: ''
+  AzureDevOpsUrl: ''
 
 steps:
 # Create PAT token secret
@@ -18,8 +19,8 @@ steps:
     useClusterAdmin: true
     namespace: 'default'
     secretType: generic
-    secretArguments: --from-literal=pattokensecret=${{ parameters.AzurePatToken }}
-    secretName: mon-azuredevops-pat-token
+    secretArguments: --from-literal=AZP_TOKEN=${{ parameters.AzurePatToken }}  --from-literal=AZP_URL=${{ parameters.AzureDevOpsUrl }}  --from-literal=AZP_POOL=my-new-pool
+    secretName: azdevops
 # Deploy the hosted docker agent docker image
 - template: AzureDevOpsTemplates\Deploy\StepTemplates\mon-kubernetes-deploy.yml@mon-devops
   parameters:

@@ -65,4 +65,6 @@ stages:
       KeyVaultName: $(sharedKeyVaultName)
       KubernetesCluster: $(sharedAksCluster)
       AzurePatToken:  $(AzurePatToken)
+      AzureDevOpsUrl: ${{ variables.AzureDevOpsUrl }}
+      
 

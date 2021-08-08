@@ -99,7 +99,7 @@ RUN apt-get update \
         libunwind8 \
         netcat 
 
-ADD docker CLI
+# ADD docker CLI
 RUN curl -fsSL https://download.docker.com/linux/static/stable/x86_64/docker-$DOCKER_VERSION.tgz | \
     tar zxvf - --strip 1 -C /usr/bin docker/docker
 

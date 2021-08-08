@@ -1,7 +1,9 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: mon-docker-agent 
+  name: mon-docker-agent
+  labels:
+    app: mon-docker-agent
 spec:
   replicas: 2
   progressDeadlineSeconds: 1800
@@ -26,15 +28,21 @@ spec:
               cpu: "130m"
               memory: "300Mi"
           env:
-          - name: AZP_POOL
-            value: 'MON - Docker'
-          - name: AZP_TOKEN
-            valueFrom: 
-              secretKeyRef:
-                name: mon-azuredevops-pat-token
-                key: pattokensecret
           - name: AZP_URL
-            value: __AzureDevOpsUrl__
+            valueFrom:
+              secretKeyRef:
+                name: azdevops
+                key: AZP_URL
+          - name: AZP_TOKEN
+            valueFrom:
+              secretKeyRef:
+                name: azdevops
+                key: AZP_TOKEN
+          - name: AZP_POOL
+            valueFrom:
+              secretKeyRef:
+                name: azdevops
+                key: AZP_POOL
           securityContext:
             allowPrivilegeEscalation: false
           volumeMounts:

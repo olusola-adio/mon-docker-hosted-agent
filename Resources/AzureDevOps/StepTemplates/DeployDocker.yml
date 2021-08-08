@@ -18,8 +18,34 @@ steps:
     useClusterAdmin: true
     namespace: 'default'
     secretType: generic
-    secretArguments: --from-literal=pattokensecret=${{ parameters.AzurePatToken }}
-    secretName: mon-azuredevops-pat-token
+    secretArguments: --from-literal=AZP_TOKEN=${{ parameters.AzurePatToken }}
+    secretName: azdevops
+# Create PAT token secret
+- task: Kubernetes@1
+  displayName: kubectl create url secret
+  inputs:
+    connectionType: Azure Resource Manager
+    azureSubscriptionEndpoint: ${{ parameters.AzureSubscriptionEndpoint }}
+    azureResourceGroup: ${{ parameters.AksResourceGroup }}
+    kubernetesCluster: ${{ parameters.KubernetesCluster }}
+    useClusterAdmin: true
+    namespace: 'default'
+    secretType: generic
+    secretArguments: --from-literal=AZP_URL=${{ parameters.AzureDevOpsUrl }}
+    secretName: azdevops
+# Create PAT token secret
+- task: Kubernetes@1
+  displayName: kubectl create Pool secret
+  inputs:
+    connectionType: Azure Resource Manager
+    azureSubscriptionEndpoint: ${{ parameters.AzureSubscriptionEndpoint }}
+    azureResourceGroup: ${{ parameters.AksResourceGroup }}
+    kubernetesCluster: ${{ parameters.KubernetesCluster }}
+    useClusterAdmin: true
+    namespace: 'default'
+    secretType: generic
+    secretArguments: --from-literal=AZP_POOL=my-new-pool
+    secretName: azdevops
 # Deploy the hosted docker agent docker image
 - template: AzureDevOpsTemplates\Deploy\StepTemplates\mon-kubernetes-deploy.yml@mon-devops
   parameters:

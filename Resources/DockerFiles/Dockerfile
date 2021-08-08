@@ -62,54 +62,54 @@
 
 
 #Block 2
-FROM microsoft/vsts-agent
+# FROM microsoft/vsts-agent
 
-ENV DOCKER_VERSION="18.03.1-ce"
+# ENV DOCKER_VERSION="18.03.1-ce"
 
-# add docker CLI
-RUN curl -fsSL https://download.docker.com/linux/static/stable/x86_64/docker-$DOCKER_VERSION.tgz | \
-    tar zxvf - --strip 1 -C /usr/bin docker/docker
+# # add docker CLI
+# RUN curl -fsSL https://download.docker.com/linux/static/stable/x86_64/docker-$DOCKER_VERSION.tgz | \
+#     tar zxvf - --strip 1 -C /usr/bin docker/docker
 
-WORKDIR /azp
-COPY ./AgentScripts/start.sh .
-RUN chmod +x start.sh
+# WORKDIR /azp
+# COPY ./AgentScripts/start.sh .
+# RUN chmod +x start.sh
 
-CMD ["./start.sh"]
+# CMD ["./start.sh"]
 
 
 
 
 #Block 3 working
-# FROM ubuntu:18.04
+FROM ubuntu:18.04
 
-# # To make it easier for build and release pipelines to run apt-get,
-# # configure apt to not require confirmation (assume the -y argument by default)
-# ENV DEBIAN_FRONTEND=noninteractive
-# RUN echo "APT::Get::Assume-Yes \"true\";" > /etc/apt/apt.conf.d/90assumeyes
+# To make it easier for build and release pipelines to run apt-get,
+# configure apt to not require confirmation (assume the -y argument by default)
+ENV DEBIAN_FRONTEND=noninteractive
+RUN echo "APT::Get::Assume-Yes \"true\";" > /etc/apt/apt.conf.d/90assumeyes
 
-# RUN apt-get update \
-# && apt-get install -y --no-install-recommends \
-#         ca-certificates \
-#         curl \
-#         jq \
-#         git \
-#         iputils-ping \
-#         libcurl4 \
-#         libicu60 \
-#         libunwind8 \
-#         netcat 
+RUN apt-get update \
+&& apt-get install -y --no-install-recommends \
+        ca-certificates \
+        curl \
+        jq \
+        git \
+        iputils-ping \
+        libcurl4 \
+        libicu60 \
+        libunwind8 \
+        netcat 
 
-# add docker CLI
-# RUN curl -fsSL https://download.docker.com/linux/static/stable/x86_64/docker-$DOCKER_VERSION.tgz | \
-#     tar zxvf - --strip 1 -C /usr/bin docker/docker
+ADD docker CLI
+RUN curl -fsSL https://download.docker.com/linux/static/stable/x86_64/docker-$DOCKER_VERSION.tgz | \
+    tar zxvf - --strip 1 -C /usr/bin docker/docker
 
-# WORKDIR /data
-# COPY ./AgentScripts/install-agent.sh .
-# RUN chmod +x install-agent.sh
+WORKDIR /data
+COPY ./AgentScripts/install-agent.sh .
+RUN chmod +x install-agent.sh
 
-# WORKDIR /azp
+WORKDIR /azp
 
-# COPY ./AgentScripts/start.sh .
-# RUN chmod +x start.sh
+COPY ./AgentScripts/start.sh .
+RUN chmod +x start.sh
 
-# CMD ["./start.sh"]
+CMD ["./start.sh"]

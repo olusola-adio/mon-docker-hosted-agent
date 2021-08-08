@@ -21,6 +21,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 RUN curl -LsS https://aka.ms/InstallAzureCLIDeb | bash \
   && rm -rf /var/lib/apt/lists/*
 
+ENV DOCKER_VERSION="18.03.1-ce"
+# ADD docker CLI
+RUN curl -fsSL https://download.docker.com/linux/static/stable/x86_64/docker-$DOCKER_VERSION.tgz | \
+    tar zxvf - --strip 1 -C /usr/bin docker/docker
+
 ARG TARGETARCH=amd64
 ARG AGENT_VERSION=2.185.1
 

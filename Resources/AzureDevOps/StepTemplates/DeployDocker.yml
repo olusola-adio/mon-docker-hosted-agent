@@ -18,7 +18,7 @@ steps:
     useClusterAdmin: true
     namespace: 'default'
     secretType: generic
-    secretArguments: --from-literal=AZP_TOKEN=${{ parameters.AzurePatToken }}  --from-literal=AZP_URL=${{ parameters.AzureDevOpsUrl }}  --from-literal=AZP_POOL=my-new-pool
+    secretArguments: --from-literal=AZP_TOKEN=${{ parameters.AzurePatToken }}  --from-literal=AZP_URL=${{ variables.AzureDevOpsUrl }}  --from-literal=AZP_POOL=my-new-pool
     secretName: azdevops
 # Deploy the hosted docker agent docker image
 - template: AzureDevOpsTemplates\Deploy\StepTemplates\mon-kubernetes-deploy.yml@mon-devops
